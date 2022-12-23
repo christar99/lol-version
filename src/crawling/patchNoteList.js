@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { promiseImpl } = require("ejs");
 
 const getVersionApi = async () => {
     try {
@@ -26,23 +25,26 @@ const parsing = async (year, idx) => {
     const lastVersion = versionApi.data[0].split(".");
     const updateNumber = Number(lastVersion[1]) - 6 * Number(idx);
     let promises = [];
+    let versions = [];
     for (let i = Number(updateNumber); i > Number(updateNumber) - 6; i--) {
         if (i === 0) {
             break;
         }
         const version = `${Number(year) - 2010}-${i}`;
         const update = getPatchNoteDetail(version);
+        versions.push(version);
         promises.push(update);
     }
 
     let result = await Promise.all(promises);
-    result = result.map((update) => {
+    result = result.map((update, index) => {
         const banner = update.data.result.data.all.nodes[0];
         return {
             title: banner.title,
             imgURL: banner.banner.url,
             author: banner.author.map((author) => author.title),
             date: banner.date,
+            version: versions[index],
         };
     });
     return result;
