@@ -25,7 +25,7 @@ const parsing = async (year, idx) => {
     const versionApi = await getVersionApi();
     const lastVersion = versionApi.data[0].split(".");
     const updateNumber = Number(lastVersion[1]) - 6 * Number(idx);
-    let updateList = [];
+    let promises = [];
     for (let i = Number(updateNumber); i > Number(updateNumber) - 6; i--) {
         if (i === 0) {
             break;
@@ -33,19 +33,15 @@ const parsing = async (year, idx) => {
         const version = `${Number(year) - 2010}-${i}`;
         const update = await getPatchNoteDetail(version);
         const banner = update.data.result.data.all.nodes[0];
-        updateList.push(
-            new Promise((resolve) => {
-                resolve({
-                    title: banner.title,
-                    imgURL: banner.banner.url,
-                    author: banner.author.map((author) => author.title),
-                    date: banner.date,
-                    version: version,
-                });
-            })
-        );
+        promises.push({
+            title: banner.title,
+            imgURL: banner.banner.url,
+            author: banner.author.map((author) => author.title),
+            date: banner.date,
+            version: version,
+        });
     }
-    return await Promise.all(updateList);
+    return await Promise.all(promises);
 };
 
 module.exports = parsing;
