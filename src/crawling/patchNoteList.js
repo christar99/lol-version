@@ -31,17 +31,21 @@ const parsing = async (year, idx) => {
             break;
         }
         const version = `${Number(year) - 2010}-${i}`;
-        const update = await getPatchNoteDetail(version);
+        const update = getPatchNoteDetail(version);
+        promises.push(update);
+    }
+
+    let result = await Promise.all(promises);
+    result = result.map((update) => {
         const banner = update.data.result.data.all.nodes[0];
-        promises.push({
+        return {
             title: banner.title,
             imgURL: banner.banner.url,
             author: banner.author.map((author) => author.title),
             date: banner.date,
-            version: version,
-        });
-    }
-    return await Promise.all(promises);
+        };
+    });
+    return result;
 };
 
 module.exports = parsing;
