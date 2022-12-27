@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { version } = require("vue");
 
 const getVersionApi = async () => {
     try {
@@ -33,11 +32,9 @@ const parsing = async (idx) => {
     const versionList = [...versionSet];
 
     let promises = [];
-    let versions = [];
     for (let i = Number(idx) * 6; i < Number(idx) * 6 + 6; i++) {
         if (i < versionList.length) {
             const update = getPatchNoteDetail(versionList[i]);
-            versions.push(version);
             promises.push(update);
         }
     }
@@ -50,7 +47,7 @@ const parsing = async (idx) => {
             imgURL: banner.banner.url,
             author: banner.author.map((author) => author.title),
             date: banner.date,
-            version: versions[index],
+            version: versionList[index],
         };
     });
 
