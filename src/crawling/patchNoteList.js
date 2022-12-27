@@ -6,8 +6,8 @@ const getVersionApi = async () => {
         return await axios.get(
             "https://ddragon.leagueoflegends.com/api/versions.json"
         );
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.log(error);
     }
 };
 
@@ -16,8 +16,8 @@ const getPatchNoteDetail = async (version) => {
         return await axios.get(
             `https://www.leagueoflegends.com/page-data/ko-kr/news/game-updates/patch-${version}-notes/page-data.json`
         );
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.log(error);
     }
 };
 
