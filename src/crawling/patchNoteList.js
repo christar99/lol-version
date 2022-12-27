@@ -32,10 +32,12 @@ const parsing = async (idx) => {
     const versionList = [...versionSet];
 
     let promises = [];
+    let versions = [];
     for (let i = Number(idx) * 6; i < Number(idx) * 6 + 6; i++) {
         if (i < versionList.length) {
             const update = getPatchNoteDetail(versionList[i]);
             promises.push(update);
+            versions.push(versionList[i]);
         }
     }
 
@@ -47,7 +49,7 @@ const parsing = async (idx) => {
             imgURL: banner.banner.url,
             author: banner.author.map((author) => author.title),
             date: banner.date,
-            version: versionList[index],
+            version: versions[index],
         };
     });
 
