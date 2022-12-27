@@ -50,6 +50,7 @@ const parsing = async (idx) => {
             author: banner.author.map((author) => author.title),
             date: banner.date,
             version: versions[index],
+            totalElements: versionList.length,
         };
     });
 
