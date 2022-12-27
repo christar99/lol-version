@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { version } = require("vue");
 
 const getVersionApi = async () => {
     try {
@@ -20,20 +21,25 @@ const getPatchNoteDetail = async (version) => {
     }
 };
 
-const parsing = async (year, idx) => {
+const parsing = async (idx) => {
     const versionApi = await getVersionApi();
-    const lastVersion = versionApi.data[0].split(".");
-    const updateNumber = Number(lastVersion[1]) - 6 * Number(idx);
+    const versionSet = new Set();
+    versionApi.data.forEach((version) => {
+        const versionDetail = version.split(".");
+        if (versionDetail[0] >= 10) {
+            versionSet.add(versionDetail[0] + "-" + versionDetail[1]);
+        }
+    });
+    const versionList = [...versionSet];
+
     let promises = [];
     let versions = [];
-    for (let i = Number(updateNumber); i > Number(updateNumber) - 6; i--) {
-        if (i === 0) {
-            break;
+    for (let i = Number(idx) * 6; i < Number(idx) * 6 + 6; i++) {
+        if (i < versionList.length) {
+            const update = getPatchNoteDetail(versionList[i]);
+            versions.push(version);
+            promises.push(update);
         }
-        const version = `${Number(year) - 2010}-${i}`;
-        const update = getPatchNoteDetail(version);
-        versions.push(version);
-        promises.push(update);
     }
 
     let result = await Promise.all(promises);
@@ -47,6 +53,7 @@ const parsing = async (year, idx) => {
             version: versions[index],
         };
     });
+
     return result;
 };
 
