@@ -13,7 +13,10 @@ const getVersionApi = async () => {
 const getPatchNoteDetail = async (version) => {
     try {
         return await axios.get(
-            `https://www.leagueoflegends.com/page-data/ko-kr/news/game-updates/patch-${version}-notes/page-data.json`
+            `https://www.leagueoflegends.com/page-data/ko-kr/news/game-updates/patch-${version}-notes/page-data.json`,
+            {
+                headers: { "Accept-Encoding": "gzip,deflate,compress" }
+            }
         );
     } catch (error) {
         console.log(error);
@@ -50,7 +53,7 @@ const parsing = async (idx) => {
             author: banner.author.map((author) => author.title),
             date: banner.date,
             version: versions[index],
-            totalElements: versionList.length,
+            totalElements: versionList.length
         };
     });
 
