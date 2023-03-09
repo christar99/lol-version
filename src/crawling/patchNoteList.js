@@ -3,7 +3,7 @@ const axios = require("axios");
 const getVersionApi = async () => {
     try {
         return await axios.get(
-            "https://ddragon.leagueoflegends.com/api/versions.json"
+            "http://ddragon.leagueoflegends.com/api/versions.json"
         );
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ const getVersionApi = async () => {
 const getPatchNoteDetail = async (version) => {
     try {
         return await axios.get(
-            `https://www.leagueoflegends.com/page-data/ko-kr/news/game-updates/patch-${version}-notes/page-data.json`,
+            `http://www.leagueoflegends.com/page-data/ko-kr/news/game-updates/patch-${version}-notes/page-data.json`,
             {
                 headers: { "Accept-Encoding": "gzip,deflate,compress" }
             }
